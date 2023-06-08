@@ -1,0 +1,3 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  cc.vihackerframework.core.log.configure.ViHackerLogAutoConfigure
+

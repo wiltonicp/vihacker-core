@@ -1,0 +1,90 @@
+vihacker:
+  enable: false
+  doc:
+    basic:
+      username: admin
+      password: vihacker
+    enable: true
+    title: ViHackerCLoud文档管理中心
+    description: ViHackerCLoud文档管理
+    service-url: http://api.vihacker.top
+    packages-to-scan: cc.vihackerframework.core.doc
+    name: Ranger
+    email: wilton.icp@gmail.com
+    url: https://blog.vihackerframework.cc
+    license: Powered by ViHackerCLoud
+    license-url: https://github.com/wiltonicp/vihacker-cloud/blob/master/LICENSE
+    password-token-url: http://localhost:10001/vihacker-uaa/oauth/token
+
+# springdoc-openapi项目配置
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    tags-sorter: alpha
+    operations-sorter: alpha
+  api-docs:
+    path: /v3/api-docs
+  group-configs:
+    - group: 'default'
+      paths-to-match: '/**'
+      packages-to-scan: ${vihacker.doc.packages-to-scan}
+
+# knife4j配置
+knife4j:
+  enable: ${vihacker.doc.enable}
+  basic:
+    enable: true
+    username: ${vihacker.doc.basic.username}
+    password: ${vihacker.doc.basic.password}
+  setting:
+    language: zh-CN
+    enable-swagger-models: true
+    enable-document-manage: true
+    swagger-model-name: 实体类列表
+    enable-version: false
+    enable-reload-cache-parameter: false
+    enable-after-script: true
+    enable-filter-multipart-api-method-type: POST
+    enable-filter-multipart-apis: false
+    enable-request-cache: true
+    enable-host: false
+    enable-host-text: 192.168.0.193:8000
+    enable-home-custom: true
+    home-custom-path: classpath:markdown/home.md
+    enable-search: false
+    enable-footer: false
+    enable-footer-custom: true
+    footer-custom-content: Apache License 2.0 | Copyright  2021-[ViHacker-Core](https://github.com/wiltonicp/vihacker-core)
+    enable-dynamic-parameter: false
+    enable-debug: true
+    enable-open-api: false
+    enable-group: true
+  #是否开启一个默认的跨域配置,该功能配合自定义Host使用
+  cors: false
+  #是否开启生产环境保护策略,详情参考文档
+  production: false
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

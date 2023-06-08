@@ -1,0 +1,44 @@
+package ${package}.${moduleName}.service.impl;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import java.util.List;
+
+import ${package}.${moduleName}.mapper.${className}Mapper;
+import ${package}.${moduleName}.entity.${className};
+import ${package}.${moduleName}.service.I${className}Service;
+import cc.vihackerframework.core.datasource.util.PageUtil;
+import cc.vihackerframework.core.datasource.entity.QuerySearch;
+
+/**
+ * ${comments}
+ * Created by ${author} on ${datetime}.
+ */
+@Service
+@RequiredArgsConstructor
+public class ${className}ServiceImpl extends ServiceImpl<${className}Mapper, ${className}>  implements I${className}Service {
+
+    private final ${className}Mapper ${classname}Mapper;
+
+    @Override
+    public IPage<${className}> find${className}ByPage(QuerySearch querySearch,${className} ${classname}) {
+        boolean isKeyword = StringUtil.isNotBlank(querySearch.getKeyword());
+        LambdaQueryWrapper<${className}> queryWrapper = Wrappers.lambdaQuery();
+        // 查询开始日期和结束日期
+        queryWrapper.between(StringUtil.isNotBlank(querySearch.getStartDate()), ${className}::getCreatedTime, querySearch.getStartDate(), querySearch.getEndDate());
+        // 关键词查询
+        // TODO: getName修改为需要检索的字段
+        queryWrapper.like(isKeyword, ${className}::getName, querySearch.getKeyword());
+        //　字段排序
+        queryWrapper.orderByDesc(${className}::getCreatedTime);
+        return this.baseMapper.selectPage(PageUtil.getPage(querySearch), queryWrapper);
+    }
+
+    @Override
+    public List<${className}> queryList(${className} ${classname}) {
+        return null;
+    }
+
+}
