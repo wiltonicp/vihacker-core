@@ -9,6 +9,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,6 +28,7 @@ import springfox.documentation.annotations.ApiIgnore;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,11 +47,8 @@ public class ViHackerDocAutoConfigure {
 
     private final ViHackerDocProperties properties;
 
-    private final OpenApiExtensionResolver openApiExtensionResolver;
-
-    public ViHackerDocAutoConfigure(ViHackerDocProperties properties, OpenApiExtensionResolver openApiExtensionResolver) {
+    public ViHackerDocAutoConfigure(ViHackerDocProperties properties) {
         this.properties = properties;
-        this.openApiExtensionResolver = openApiExtensionResolver;
     }
 
     /**
@@ -85,21 +84,24 @@ public class ViHackerDocAutoConfigure {
                 openApi.addExtension("x-test123", "333");
                 openApi.getPaths().addExtension("x-abb", RandomUtil.randomInt(1, 100));
             }
-
+            openApi.setInfo(info());
         };
     }
 
     @Bean
-    @Order(-1)
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(new Info()
-                        .title(properties.getTitle())
-                        .version(properties.getVersion())
-                        .contact(new Contact().name(properties.getName()).url(properties.getUrl()).email(properties.getEmail()))
-                        .description( properties.getDescription())
-                        .termsOfService(properties.getServiceUrl())
-                        .license(new License().name(properties.getLicense())
-                                .url(properties.getLicenseUrl())));
+                .info(info());
+    }
+
+    public Info info(){
+        return new Info()
+                .title(properties.getTitle())
+                .version(properties.getVersion())
+                .contact(new Contact().name(properties.getName()).url(properties.getUrl()).email(properties.getEmail()))
+                .description( properties.getDescription())
+                .termsOfService(properties.getServiceUrl())
+                .license(new License().name(properties.getLicense())
+                        .url(properties.getLicenseUrl()));
     }
 }
