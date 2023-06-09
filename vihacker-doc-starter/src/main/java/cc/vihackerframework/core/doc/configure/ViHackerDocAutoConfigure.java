@@ -4,12 +4,13 @@ import cc.vihackerframework.core.factory.YamlPropertySourceFactory;
 import cc.vihackerframework.core.doc.properties.ViHackerDocProperties;
 import cn.hutool.core.util.RandomUtil;
 import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
-import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Contact;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.OAuthFlows;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import jakarta.servlet.ServletRequest;
 import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,9 +21,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
-import org.springframework.core.annotation.Order;
 import springfox.documentation.annotations.ApiIgnore;
 
 import java.security.Principal;
@@ -84,24 +83,52 @@ public class ViHackerDocAutoConfigure {
                 openApi.addExtension("x-test123", "333");
                 openApi.getPaths().addExtension("x-abb", RandomUtil.randomInt(1, 100));
             }
-            openApi.setInfo(info());
+            openApi.setInfo(apiInfo());
+            openApi.schemaRequirement("111",securityScheme());
         };
     }
 
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
-                .info(info());
+                .info(apiInfo())
+                .schemaRequirement("111",securityScheme());
     }
 
-    public Info info(){
+    private SecurityScheme securityScheme(){
+        SecurityScheme securityScheme = new SecurityScheme();
+        securityScheme.setType(SecurityScheme.Type.APIKEY);
+        securityScheme.description("securityScheme描述");
+        securityScheme.setName("Authorization");
+        securityScheme.in(SecurityScheme.In.HEADER);
+        securityScheme.scheme("1111");
+        securityScheme.setBearerFormat("Bearer");
+//        securityScheme.flows(new OAuthFlows());
+        securityScheme.setOpenIdConnectUrl(properties.getPasswordTokenUrl());
+
+        return securityScheme;
+    }
+
+    private List<SecurityRequirement> securityRequirement(){
+        List<SecurityRequirement> securityRequirement = new ArrayList<>();
+
+        return securityRequirement;
+    }
+
+    public Info apiInfo(){
+        String description = String.format("<div style='font-size:%spx;color:%s;'>%s</div>",
+                properties.getDescriptionFontSize(), properties.getDescriptionColor(), properties.getDescription());
+        Contact contact = new Contact().name(properties.getName()).url(properties.getUrl()).email(properties.getEmail());
+
+        License license = new License().name(properties.getLicense())
+                .url(properties.getLicenseUrl());
+
         return new Info()
                 .title(properties.getTitle())
                 .version(properties.getVersion())
-                .contact(new Contact().name(properties.getName()).url(properties.getUrl()).email(properties.getEmail()))
-                .description( properties.getDescription())
+                .contact(contact)
+                .description(description)
                 .termsOfService(properties.getServiceUrl())
-                .license(new License().name(properties.getLicense())
-                        .url(properties.getLicenseUrl()));
+                .license(license);
     }
 }
