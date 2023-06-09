@@ -4,16 +4,10 @@ import cc.vihackerframework.core.mybatis.handler.ViHackerMetaObjectHandler;
 import com.baomidou.mybatisplus.annotation.DbType;
 import com.baomidou.mybatisplus.autoconfigure.ConfigurationCustomizer;
 import com.baomidou.mybatisplus.extension.plugins.MybatisPlusInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.handler.TenantLineHandler;
 import com.baomidou.mybatisplus.extension.plugins.inner.OptimisticLockerInnerInterceptor;
 import com.baomidou.mybatisplus.extension.plugins.inner.PaginationInnerInterceptor;
-import com.baomidou.mybatisplus.extension.plugins.inner.TenantLineInnerInterceptor;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import net.sf.jsqlparser.expression.LongValue;
 import org.apache.ibatis.type.EnumTypeHandler;
-import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -28,7 +22,6 @@ import org.springframework.core.annotation.Order;
  */
 @Configuration
 @Order(Ordered.HIGHEST_PRECEDENCE)
-@MapperScan("cc.vihackerframework.**.mapper.**")
 public class ViHackerDataSourceAutoConfigure {
 
     /**
